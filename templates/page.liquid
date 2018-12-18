@@ -1,0 +1,15 @@
+{{ 'lightbox.css' | global_asset_url | stylesheet_tag }}
+{{ 'lightbox.js' | global_asset_url | script_tag }}
+
+<!-- /templates/page.liquid -->
+<h1 class="pages-title {% if page.handle == 'collections' %} archive-title {% endif %}" style="text-transform: uppercase;">{{ page.title }}</h1>
+{% if page.handle == 'collections' %}
+<div class="scrolling-copy">
+  <p class="marquee" id="mypara">COPY FOR COLLECTION<br>FW 18: SHOT BY...</p>
+</div>
+{% endif %}
+<div class="rte">
+  <div class="archive-container">
+  {{ page.content }}
+  </div>
+</div>

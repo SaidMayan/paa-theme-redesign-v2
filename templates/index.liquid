@@ -1,0 +1,25 @@
+<style>
+  @media only screen and (min-width: 749px) {
+    body {overflow-y:hidden;}}
+</style>
+<div class="index-sections">
+  {{ content_for_index }}
+  </div>
+
+
+<script type="text/javascript">
+   var imageCount = 4;
+   $(function(){ 
+      var whichImage=get_random();
+      var image=new Array(imageCount)
+        image[0] = "<img src=\"{{ 'PAA_FW18_07.jpg' | asset_url }}\" />";
+        image[1] = "<img src=\"{{ 'PAA_FW18_10.jpg' | asset_url }}\" />";
+        image[2] = "<img src=\"{{ 'PAA_FW18_26.jpg' | asset_url }}\" />";
+        image[3] = "<img src=\"{{ 'PAA_FW18_55.jpg' | asset_url }}\" />";
+        function get_random() { 
+           var ranNum= Math.floor(Math.random()* imageCount );
+           return ranNum;
+        }
+        $('#randimage p a').prepend(image[whichImage]);
+    });
+</script>

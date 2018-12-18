@@ -1,0 +1,11 @@
+{{ 'lightbox.css' | global_asset_url | stylesheet_tag }}
+{{ 'lightbox.js' | global_asset_url | script_tag }}
+
+<!-- /templates/page.liquid -->
+<h1 class="small--text-center">{{ page.title }}</h1>
+
+<div class="rte">
+  <div class="archive-container">
+  {{ page.content }}
+  </div>
+</div>

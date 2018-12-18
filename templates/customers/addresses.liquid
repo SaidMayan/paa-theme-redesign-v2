@@ -1,0 +1,183 @@
+<!-- /templates/customers/addressess.liquid -->
+{% comment %}
+
+  Template note:
+    - There are separate 'add new' and 'edit' address forms
+
+{% endcomment %}
+
+{% paginate customer.addresses by 5 %}
+
+<header class="small--text-center">
+  <h1 style="text-transform: uppercase;">{{ 'customer.account.title' | t }}</h1>
+  <button style="text-align: center; color: black; text-align: center; color: black; background: transparent; border: 2px solid black" type="button" class="btn address-new-toggle">{{ 'customer.addresses.add_new' | t }}</button>
+</header>
+
+{% comment %}
+  Add address form, hidden by default
+{% endcomment %}
+<div id="AddressNewForm" class="form-address form-vertical hide">
+
+  {% form 'customer_address', customer.new_address %}
+
+    <div class="grid">
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'FIRST NAME'" placeholder="FIRST NAME" type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocapitalize="words">
+      </div>
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'LAST NAME'" placeholder="LAST NAME" type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocapitalize="words">
+      </div>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'COMPANY'" placeholder="COMPANY" type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocapitalize="words">
+
+       
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'ADDRESS'" placeholder="ADDRESS" type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocapitalize="words">
+
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'ADDRESS (LINE 2)'" placeholder="ADDRESS (LINE 2)" type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocapitalize="words">
+      </div>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'CITY'" placeholder="CITY" type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocapitalize="words">
+      </div>
+
+      <div class="grid__item">
+        <label style="padding-left: 10px;" for="AddressCountryNew">{{ 'customer.addresses.country' | t }}:</label>
+        <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+      </div>
+
+      <div class="grid__item" id="AddressProvinceContainerNew">
+        <label style="padding-left: 10px;" for="AddressProvinceNew">{{ 'customer.addresses.province' | t }}</label>
+        <select id="AddressProvinceNew" name="address[province]" data-default="{{ form.province }}"></select>
+      </div>
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'POSTAL / ZIPCODE'" placeholder="POSTAL / ZIPCODE" type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters">
+      </div>
+
+      <div class="grid__item">
+        <input onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'PHONE'"  placeholder="PHONE"type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}">
+      </div>
+    </div>
+
+    <p>
+  <div style="visibility: hidden;">{{ form.set_as_default_checkbox }}</div>
+  <div style="display: flex; justify-content: space-between;"><label class="set-default-address" style="padding-right: 10px; margin-left: auto;" for="address_default_address_new">{{ 'customer.addresses.set_default' | t }}</label></div>
+    </p>
+
+  <div style="display: flex; align-items: center; justify-content: center; padding-bottom: 8px;"><p><input style="text-align: center; color: black; text-align: center; color: black; background: transparent; border: 2px solid black;" type="submit" class="btn" value="{{ 'customer.addresses.add' | t }}"></p></div>
+  <div style="display: flex; align-items: center; justify-content: center; padding-bottom: 8px;"><p><button style="margin-bottom: 10px;" type="button" class="btn--link address-new-toggle">{{ 'customer.addresses.cancel' | t }}</button></p></div>
+
+  {% endform %}
+</div>
+
+{% if customer.addresses.size > 0 %}
+  <hr class="hr--clear hr--small">
+  <h2 style="text-transform: uppercase;">{{ 'customer.addresses.title' | t }}</h2>
+{% endif %}
+
+{% comment %}
+  List all customer addresses with a unique edit form.
+  Also add pagination in case they have a large number of addresses
+{% endcomment %}
+{% for address in customer.addresses %}
+
+  {% if address == customer.default_address %}
+    <p style="text-transform: uppercase;"><strong>{{ 'customer.addresses.default' | t }}</strong></p>
+  {% endif %}
+
+<div style="text-transform: uppercase;">{{ address | format_address }}</div>
+  <p style="margin-bottom: 10px;">
+    <button style="text-transform: uppercase;" type="button" class="btn--link address-edit-toggle" data-form-id="{{ address.id }}">{{ 'customer.addresses.edit' | t }}</button>
+    <span class="vertical-divider"></span>
+    <button style="text-transform: uppercase;" type="button" class="btn--link address-delete" data-form-id="{{ address.id }}" data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}">{{ 'customer.addresses.delete' | t }}</button>
+  </p>
+
+  <div class="edit-adress-form form-vertical" style="text-transform: uppercase;" id="EditAddress_{{ address.id }}" class="hide form-vertical">
+    {% form 'customer_address', address %}
+
+      <div class="grid">
+        <div class="grid__item">
+          <input class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'FIRST NAME'" type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocapitalize="words">
+        </div>
+
+        <div class="grid__item">
+          <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'LAST NAME'" type="text" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocapitalize="words">
+        </div>
+      </div>
+
+      <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'COMPANY'"  type="text" id="AddressCompany_{{ form.id }}" name="address[company]" value="{{ form.company }}" autocapitalize="words">
+
+      <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'ADDRESS'"  type="text" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocapitalize="words">
+
+      <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'ADDRESS (LINE 2)'" type="text" id="AddressAddress2_{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocapitalize="words">
+
+      <input style="border-top: 2px solid black; border-bottom: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'CITY'" type="text" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocapitalize="words">
+	
+      <label style="padding-left: 10px;" for="AddressCountry_{{ form.id }}">{{ 'customer.addresses.country' | t }}:</label><br>
+      <select style="background:transparent;" id="AddressCountry_{{ form.id }}" class="address-country-option" data-form-id="{{ form.id }}" name="address[country]" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+
+      <div id="AddressProvinceContainer_{{ form.id }}" style="display:none">
+        <label style="padding-left: 10px;" for="AddressProvince_{{ form.id }}">{{ 'customer.addresses.province' | t }}:</label><br>
+        <select style="background:transparent;" id="AddressProvince_{{ form.id }}" name="address[province]" data-default="{{ form.province }}"></select>
+      </div>
+
+      <div class="grid">
+        <div class="grid__item">
+          <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'POSTAL / ZIPCODE'" type="text" id="AddressZip_{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters">
+        </div>
+
+        <div class="grid__item">
+          <input style="border-top: 2px solid black;" class="edit-address-input" onfocus="this.placeholder = ''"
+onblur="this.placeholder = 'PHONE'" type="tel" id="AddressPhone_{{ form.id }}" name="address[phone]" value="{{ form.phone }}">
+        </div>
+      </div>
+
+      <div style="display: flex; margin-bottom: 8px;">
+        <p style="padding-right: 10px; margin-left: auto;">{{ form.set_as_default_checkbox }}
+        <label for="address_default_address_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+        </p>  
+        </div>
+    
+    <div style="display: flex; align-items: center; justify-content: center; padding-bottom: 8px;"><p><input style="text-align: center; color: black; text-align: center; color: black; background: transparent; border: 2px solid black;" type="submit" class="btn" value="{{ 'customer.addresses.update' | t }}"></p></div>
+    <div style="display: flex; align-items: center; justify-content: center; padding-bottom: 8px;"><p><button type="button" class="btn--link address-edit-toggle" data-form-id="{{ form.id }}">{{ 'customer.addresses.cancel' | t }}</button></p></div>
+
+    {% endform %}
+  </div>
+
+  {% unless forloop.last %}
+    <hr>
+  {% endunless %}
+{% endfor %}
+
+{% if paginate.pages > 1 %}
+  <div class="pagination">
+    {{ paginate | default_pagination }}
+  </div>
+{% endif %}
+{% endpaginate %}
